@@ -1,0 +1,12 @@
+[submodule "eureka"]
+	path = eureka
+	url = https://github.com/KhaliRasbaju/gaaf_eureka.git
+[submodule "autentificacion"]
+	path = autentificacion
+	url = https://github.com/KhaliRasbaju/gaaf_autentificacion.git
+[submodule "inventario-entrada"]
+	path = inventario-entrada
+	url = https://github.com/KhaliRasbaju/gaaf_crud_eclipse.git
+[submodule "gateway"]
+	path = gateway
+	url = https://github.com/KhaliRasbaju/gaaf_gateway.git

@@ -1,4 +1,61 @@
+
 services:
+  autentificacion-ms:
+    depends_on:
+      - auth-db
+    build: 
+      context: ./autentificacion
+      dockerfile: dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - DB_HOST_AUTENTIFICACION=${DB_HOST_AUTENTIFICACION}
+      - DB_AUTENTIFICACION=${DB_AUTENTIFICACION}
+      - SERVICE_AUTH=${SERVICE_AUTH}	
+      - JWT_SECRET=${JWT_SECRET}
+      - EUREKA_URL=${EUREKA_URL}
+    networks:
+      - gaaf-net
+
+  inventario-ms:
+    depends_on:
+      - gaaf-db
+    build:
+      context: ./inventario-entrada
+      dockerfile: dockerfile
+    ports: 
+      - "8081:8081"
+    environment:
+      - DB_HOST_INVENTARIO=${DB_HOST_INVENTARIO}
+      - DB_INVENTARIO=${DB_INVENTARIO}
+      - SERVICE_INVENTARIO=${SERVICE_INVENTARIO}
+      - EUREKA_URL=${EUREKA_URL}
+    networks: 
+      - gaaf-net
+
+  gateway-ms:
+    build: 
+      context: ./gateway
+      dockerfile: dockerfile
+    ports: 
+      - "8080:8080"
+    environment:
+      - SERVICE_INVENTARIO=${SERVICE_INVENTARIO}
+      - SERVICE_AUTH=${SERVICE_AUTH}
+      - JWT_SECRET=${JWT_SECRET}
+      - EUREKA_URL=${EUREKA_URL}
+    networks:
+      - gaaf-net
+
+  eureka-ms: 
+    build:
+      context: ./eureka
+      dockerfile: dockerfile
+    ports: 
+      - "8761:8761"
+    networks:
+      - gaaf-net
+
   gaaf-db:
     image: mysql:8.4
     container_name: gaaf_db
@@ -14,18 +71,16 @@ services:
       - gaaf-net
 
   auth-db:
-	image: mongo
-	container_name: auth-db
-	restart: always
-	command: ["--replSet", "rs0"]
-	ports:
-	  - "27017:27017"
-	volumes:
-	  - gaaf_auth_db:/data/db
-	networks:
-	  - gaaf-net
-
-
+    image: mongo
+    container_name: auth-db
+    restart: always
+    command: ["--replSet", "rs0"]
+    ports:
+      - "27017:27017"
+    volumes:
+      - gaaf_auth_db:/data/db
+    networks:
+      - gaaf-net
 
 volumes:
   gaaf_db:
