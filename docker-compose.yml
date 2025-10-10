@@ -1,9 +1,8 @@
-
 services:
   autentificacion-ms:
     depends_on:
       - auth-db
-    build: 
+    build:
       context: ./autentificacion
       dockerfile: dockerfile
     ports:
@@ -11,7 +10,7 @@ services:
     environment:
       - DB_HOST_AUTENTIFICACION=${DB_HOST_AUTENTIFICACION}
       - DB_AUTENTIFICACION=${DB_AUTENTIFICACION}
-      - SERVICE_AUTH=${SERVICE_AUTH}	
+      - SERVICE_AUTH=${SERVICE_AUTH}
       - JWT_SECRET=${JWT_SECRET}
       - EUREKA_URL=${EUREKA_URL}
     networks:
@@ -23,21 +22,21 @@ services:
     build:
       context: ./inventario-entrada
       dockerfile: dockerfile
-    ports: 
+    ports:
       - "8081:8081"
     environment:
       - DB_HOST_INVENTARIO=${DB_HOST_INVENTARIO}
       - DB_INVENTARIO=${DB_INVENTARIO}
       - SERVICE_INVENTARIO=${SERVICE_INVENTARIO}
       - EUREKA_URL=${EUREKA_URL}
-    networks: 
+    networks:
       - gaaf-net
 
   gateway-ms:
-    build: 
+    build:
       context: ./gateway
       dockerfile: dockerfile
-    ports: 
+    ports:
       - "8080:8080"
     environment:
       - SERVICE_INVENTARIO=${SERVICE_INVENTARIO}
@@ -47,11 +46,11 @@ services:
     networks:
       - gaaf-net
 
-  eureka-ms: 
+  eureka-ms:
     build:
       context: ./eureka
       dockerfile: dockerfile
-    ports: 
+    ports:
       - "8761:8761"
     networks:
       - gaaf-net
@@ -86,6 +85,6 @@ volumes:
   gaaf_db:
   gaaf_auth_db:
 
-networks: 
+networks:
   gaaf-net:
     driver: bridge
